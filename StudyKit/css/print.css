@@ -1,0 +1,229 @@
+/* Print + print-preview (owner: UI agent from Phase 1.2; base by Lead).
+   Print documents render on #/print/<doc> with body.print-route; each .doc ends with an "END OF DOCUMENT: <id>" sentinel.
+   Paper is Letter. Layout rules for the documents are NOT media-dependent, so the on-screen preview and the PDF agree
+   The cheat sheet is readable cards, one lecture per page — no shrink-to-fit. */
+@page {
+  size: letter;
+  margin: 14mm 13mm 15mm;
+  @bottom-right { content: counter(page) " / " counter(pages); font: 8pt system-ui, sans-serif; color: #898781; }
+  @bottom-left { content: "NSCOM03 Midterm Study Kit"; font: 8pt system-ui, sans-serif; color: #898781; }
+}
+body.print-route { background: #e9e8e3; }
+body.print-route #app { padding: 24px 0; }
+.doc { background: #ffffff; color: #0b0b0b; width: 8.5in; max-width: 100%; margin: 0 auto 24px; padding: 14mm 13mm; box-shadow: 0 2px 14px rgba(0, 0, 0, 0.12);
+  font: 10pt/1.4 var(--font); }
+.doc .sentinel { margin-top: 18px; font-size: 7pt; color: #898781; text-align: right; }
+
+/* A document is always paper-white with the light palette, whatever theme the screen is in. */
+.doc {
+  color-scheme: light;
+  --page: #ffffff; --surface: #ffffff; --surface-2: #f3f2ee; --raised: #ffffff;
+  --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11, 11, 11, 0.14); --border-strong: rgba(11, 11, 11, 0.22);
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+  --series-5: #e87ba4; --series-6: #008300; --series-7: #4a3aa7; --series-8: #e34948;
+  --good: #0ca30c; --critical: #d03b3b; --good-text: #006300; --accent: #2a78d6; --accent-ink: #1c5cab; --accent-wash: #e6f0fc;
+  --violet-wash: #eeecfa; --warn-wash: #fdf3df; --crit-wash: #fbe9e9; --good-wash: #e6f4e6;
+  --v1: #1f5fb4; --v2: #b4471a; --v3: #0b7650; --v4: #5b3fc4; --v5: #b0286a; --v6: #8a5a00;
+}
+.doc .no-print, .doc button, .doc .btn { display: none !important; }
+.doc a { color: inherit; text-decoration: none; }
+
+/* ---------- cheat sheet and recall drill: readable formula cards (~10pt), one lecture per page, no shrink-to-fit ---------- */
+.cheat-sheet { font-size: 10pt; line-height: 1.38; color: var(--text-primary); }
+.cheat-head { margin: 0 0 4mm; padding: 0 0 2mm; border-bottom: 1.4pt solid var(--text-primary); }
+.cheat-head h1 { margin: 0; font-size: 16pt; line-height: 1.2; letter-spacing: 0; }
+.cheat-sub { font-size: 8.5pt; line-height: 1.3; color: var(--text-secondary); margin-top: 1mm; }
+.cs-lecture + .cs-lecture { break-before: page; }
+.cs-lecture-title { display: flex; align-items: baseline; gap: 3mm; font-size: 14pt; margin: 0 0 3mm; padding-bottom: 1.5mm; border-bottom: 0.8pt solid var(--border-strong); break-after: avoid; }
+.cs-deck { font-family: var(--mono); font-size: 10pt; font-weight: 700; color: var(--accent-ink); background: var(--accent-wash); border-radius: 999px; padding: 0.3mm 2.4mm; }
+.cs-fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; margin-bottom: 4mm; }
+.cs-fcard { break-inside: avoid; border: 0.6pt solid var(--border-strong); border-radius: 1.6mm; padding: 2mm 3mm; background: var(--surface); }
+.cs-fname { font-weight: 700; display: flex; justify-content: space-between; gap: 2mm; align-items: baseline; }
+.cs-ref { color: var(--text-muted); font-size: 0.8em; font-family: var(--mono); font-weight: 500; white-space: nowrap; }
+.cs-eq { font-size: 1.12em; margin: 1.4mm 0; overflow-x: auto; }
+.cs-eq math[display="block"] { margin: 1mm 0; font-size: 1.15em; }
+.cs-eq-blank { padding: 2.5mm 0 1.5mm; }
+.cs-line { letter-spacing: 0.04em; color: var(--text-muted); }
+.cs-legend { list-style: none; margin: 1mm 0; padding: 1mm 0 0; border-top: 0.5pt dashed var(--border-strong); font-size: 0.9em; }
+.cs-legend li { display: grid; grid-template-columns: minmax(2.4em, auto) 1fr; gap: 2mm; align-items: baseline; }
+.cs-sym { text-align: right; white-space: nowrap; }
+.cs-unit { color: var(--text-muted); }
+.cs-use, .cs-ex, .cs-note { font-size: 0.9em; margin: 1mm 0 0; }
+.cs-ex { color: var(--text-secondary); }
+.cs-ex::before { content: "Slide example: "; font-weight: 700; color: var(--text-primary); }
+.cs-note { color: var(--text-secondary); font-style: italic; }
+.cs-panels { columns: 2; column-gap: 4mm; }
+.cs-panel { break-inside: avoid; margin: 0 0 3mm; border: 0.6pt solid var(--border-strong); border-radius: 1.6mm; background: var(--surface); }
+.cs-panel > h4 { margin: 0; padding: 1mm 3mm; font-size: 1em; font-weight: 700; background: var(--surface-2); border-bottom: 0.6pt solid var(--border-strong); border-radius: 1.6mm 1.6mm 0 0; }
+.cs-global > h4 { background: var(--accent-wash); }
+.cs-body { padding: 1.6mm 3mm 2mm; overflow-wrap: break-word; }
+.cs-body p { margin: 0 0 1mm; }
+.cs-body ul, .cs-body ol { margin: 0; padding-left: 4.5mm; }
+.cs-body li { margin: 0.6mm 0; }
+.cs-figs { display: flex; flex-wrap: wrap; gap: 3mm 6mm; align-items: flex-start; margin-top: 2mm; break-inside: avoid; }
+.cs-figs figure { margin: 0; break-inside: avoid; }
+.cs-figs figcaption { font-size: 8.5pt; color: var(--text-secondary); }
+.cs-figs svg { max-width: 100%; height: auto; }
+.cs-pending { margin: 0; color: var(--text-muted); font-style: italic; }
+.cheat-sheet em.k { font-style: normal; font-weight: 700; }
+
+.rc-blank { white-space: nowrap; }
+.rc-n { font-size: 0.8em; font-weight: 700; color: var(--text-secondary); margin-right: 0.15em; }
+.rc-answers { break-before: page; }
+.rc-answers h2 { margin: 0 0 1.5mm; font-size: 14pt; }
+.rc-note { margin: 0 0 3mm; font-size: 9pt; color: var(--text-secondary); }
+.rc-list { column-count: 2; column-gap: 6mm; font-size: 9.5pt; line-height: 1.35; }
+.rc-a { break-inside: avoid; margin: 0 0 1.4mm; }
+.rc-a math[display="block"] { display: math; margin: 0 0 0 1mm; }   /* inline math layout: never block or inline-block, which drop MathML layout */
+
+/* The same sheet on the app's cheat-sheet page. */
+@media screen {
+  .cheat-sheet.cheat-screen { font-size: 15px; line-height: 1.5; }
+  .cheat-screen .cheat-head { border-bottom-color: var(--border-strong); padding-bottom: 8px; margin-bottom: 18px; }
+  .cheat-screen .cheat-head h1 { font-size: 22px; }
+  .cheat-screen .cheat-sub { font-size: 13px; color: var(--text-muted); }
+  .cheat-screen .cs-lecture { margin: 0 0 34px; }
+  .cheat-screen .cs-lecture-title { font-size: 20px; }
+  .cheat-screen .cs-deck { font-size: 13px; padding: 1px 9px; }
+  .cheat-screen .cs-fgrid { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+  .cheat-screen .cs-fcard, .cheat-screen .cs-panel { border-color: var(--border); border-radius: var(--radius-sm); background: var(--raised); }
+  .cheat-screen .cs-fcard { padding: 10px 14px; }
+  .cheat-screen .cs-panels { columns: 2 340px; column-gap: 16px; }
+  .cheat-screen .cs-panel { margin-bottom: 14px; }
+  .cheat-screen .cs-panel > h4 { padding: 6px 12px; font-size: 14px; border-bottom-color: var(--border); }
+  .cheat-screen .cs-body { padding: 8px 12px 10px; }
+  .cheat-screen .cs-body ul, .cheat-screen .cs-body ol { padding-left: 18px; }
+  .cheat-screen .cs-body li { margin: 4px 0; }
+  .cheat-screen .cs-figs { gap: 14px 28px; }
+}
+
+/* ---------- reviewer ---------- */
+.doc-reviewer { font-size: 9.5pt; line-height: 1.38; }
+.doc-reviewer h1 { font-size: 19pt; margin: 0 0 2mm; }
+.doc-reviewer h2 { font-size: 13.5pt; margin: 6mm 0 2mm; }
+.doc-reviewer h3 { font-size: 11pt; margin: 4mm 0 1.5mm; }
+.doc-reviewer h4 { font-size: 10pt; }
+.doc-reviewer .small { font-size: 8.5pt; }
+.doc-reviewer .tbl { font-size: 8.8pt; margin: 2mm 0 3mm; }
+.doc-reviewer .tbl th, .doc-reviewer .tbl td { padding: 1mm 1.8mm; }
+.doc-reviewer .callout { padding: 2.2mm 3.4mm; margin: 3mm 0; }
+.doc-reviewer .formula-card .f { font-size: 11.5pt; }
+.doc-reviewer .formula-grid { gap: 3mm; }
+.doc-reviewer .deck-line { font-size: 8pt; }
+.doc-reviewer .topic-head .blurb { font-size: 10.5pt; }
+.doc-reviewer .topic .grid2 { margin: 4mm 0; }
+.doc-reviewer .viz-stage { overflow: visible; }
+.rv-cover .ex-kicker { margin-bottom: 1mm; }
+.rv-cover h1 { font-size: 26pt; }
+.rv-sub { font-size: 11pt; color: var(--text-secondary); }
+.rv-how li { margin: 1.4mm 0; }
+.rv-toc { width: 100%; }
+
+/* ---------- exam papers and answer keys ---------- */
+.doc-exam, .doc-key { font-size: 10pt; line-height: 1.38; }
+.ex-kicker { font-size: 8pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; }
+.ex-head { border-bottom: 1.5pt solid var(--text-primary); padding-bottom: 3mm; margin-bottom: 4mm; }
+.ex-head h1 { font-size: 19pt; margin: 1mm 0 1mm; letter-spacing: -0.01em; }
+.ex-meta { font-size: 9.5pt; color: var(--text-secondary); }
+.ex-id { display: flex; gap: 6mm; margin: 5mm 0 3.5mm; font-size: 10pt; }
+.ex-fld { display: flex; align-items: flex-end; gap: 2mm; flex: 1; }
+.ex-fld.wide { flex: 2.2; }
+.ex-fld i { flex: 1; border-bottom: 0.8pt solid var(--text-primary); height: 5mm; }
+.ex-score { border-collapse: collapse; width: 100%; font-size: 9pt; margin-top: 2mm; }
+.ex-score th, .ex-score td { border: 0.8pt solid var(--text-primary); padding: 0.8mm 2mm; text-align: center; font-weight: 600; }
+.ex-score td { font-weight: 400; }
+.ex-score td.box { height: 9mm; }
+.ex-score th:first-child { text-align: left; width: 16mm; }
+.ex-instr { border: 0.8pt solid var(--text-primary); border-radius: 1mm; padding: 2.5mm 3.5mm; font-size: 9pt; margin: 0 0 4mm; }
+.ex-draft { border: 0.8pt dashed var(--text-secondary); border-radius: 1mm; padding: 2.5mm 3.5mm; font-size: 9.5pt; margin: 0 0 4mm; background: var(--warn-wash); }
+.ex-todo { color: var(--text-muted); font-style: italic; font-size: 9pt; }
+.ex-blueprint { width: 100%; }
+.ex-plan { margin: 0; padding-left: 4mm; }
+.ex-part > h2 { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; font-size: 12.5pt; margin: 6mm 0 1.5mm;
+  padding-bottom: 1mm; border-bottom: 0.8pt solid var(--text-primary); }
+.ex-pts { font-size: 9pt; font-weight: 400; color: var(--text-secondary); white-space: nowrap; }
+.ex-note { font-size: 8.5pt; color: var(--text-secondary); margin: 0 0 3mm; }
+.ex-q { display: grid; grid-template-columns: 14mm 7.5mm minmax(0, 1fr); align-items: start; margin: 0 0 3.2mm; break-inside: avoid; }
+.ex-q.no-lead { grid-template-columns: 7.5mm minmax(0, 1fr); }
+.ex-blank { border-bottom: 0.8pt solid var(--text-primary); height: 5.2mm; width: 11mm; }
+.ex-n { font-weight: 700; text-align: right; padding-right: 1.5mm; }
+.ex-body { min-width: 0; }
+.ex-text p { margin: 0 0 1.5mm; }
+.ex-hint { font-size: 8.5pt; color: var(--text-secondary); }
+.ex-pts + .ex-text { margin-top: 0; }
+.ex-body > .ex-pts { text-align: right; float: right; margin-left: 4mm; }
+.ex-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6mm 6mm; margin-top: 1.2mm; }
+.ex-choices.long { grid-template-columns: 1fr; }
+.ex-ch { display: flex; gap: 1.6mm; }
+.ex-l { font-weight: 700; flex: none; }
+.ex-al { display: flex; align-items: flex-end; gap: 2mm; margin-top: 2.2mm; }
+.ex-alab { flex: none; font-size: 9.5pt; }
+.ex-line { flex: 1; border-bottom: 0.8pt solid var(--text-primary); height: 5mm; min-width: 20mm; }
+.ex-unit { flex: none; font-size: 9.5pt; }
+.ex-opts { display: flex; flex-wrap: wrap; gap: 1mm 5mm; }
+.ex-gen .ex-text { clear: none; }
+.ex-work { position: relative; height: 36mm; margin: 2mm 0; border: 0.5pt dashed var(--axis); border-radius: 1mm; }
+.ex-work-label { position: absolute; top: 0.8mm; left: 1.6mm; font-size: 7pt; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.ex-answers { margin-top: 1mm; }
+.ex-answers .ex-al + .ex-al { margin-top: 3mm; }
+.ex-grid { margin: 2mm 0; overflow: visible; }
+.ex-draw { margin-top: 2mm; padding: 1mm 2mm 2mm; border: 0.5pt solid var(--axis); border-radius: 1mm; }
+.ex-draw-label { font-size: 7pt; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.ex-draw .sketch-fig { max-width: none; }
+
+/* answer keys */
+.kq { margin: 0 0 3.5mm; padding-bottom: 2.5mm; border-bottom: 0.5pt solid var(--grid); }
+.kq-gen { break-inside: auto; }
+.kq-gen .key-box, .kq-gen .sketch-answer { break-inside: avoid; }   /* a figure stays with its label */
+.kq-head { display: flex; align-items: baseline; gap: 2mm; }
+/* MCQ / identification cards in the key: flat and tight (about 6 per page); the ✓ choice already gives an MCQ answer */
+.doc-key .q { border: 0; border-radius: 0; background: none; padding: 0; margin: 0; }
+.doc-key .q-head { margin-bottom: 0.4mm; }
+.doc-key .q-type { font-size: 7.5pt; }
+.doc-key .q-text { margin: 0 0 0.8mm; }
+.doc-key .q-choices { margin: 0.4mm 0 0.8mm; padding-left: 6mm; }
+.doc-key .q-choices li { margin: 0.2mm 0; }
+.doc-key .kq-short .q-choices { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; }
+.doc-key .q-mcq .q-answer, .doc-key .q-multi .q-answer { display: none; }
+.doc-key .q-answer { margin: 0.6mm 0; }
+.doc-key .q-explain { margin-top: 0.8mm; padding: 1.2mm 2.6mm; font-size: 9pt; }
+.doc-key .q-explain > div + div { margin-top: 0.6mm; }
+.doc-key .q-explain > div:first-child { display: inline; }
+.doc-key .q-explain .q-ref { display: inline; margin: 0 0 0 2mm; }
+.doc-key .chip.ref { font-size: 7.5pt; }
+.kq-quickbox { border: 0.8pt solid var(--text-primary); border-radius: 1mm; padding: 2mm 3.4mm; margin: 0 0 4mm; font-size: 9pt; }
+.kq-quick { margin: 0.8mm 0; font-variant-numeric: tabular-nums; }
+.kq-pair { white-space: nowrap; margin-right: 1.2mm; }
+
+/* ---------- print media ---------- */
+@media print {
+  :root, :root[data-theme] {
+    color-scheme: light;
+    --page: #ffffff; --surface: #ffffff; --surface-2: #f3f2ee; --raised: #ffffff;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #898781;
+    --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11, 11, 11, 0.14); --border-strong: rgba(11, 11, 11, 0.22);
+    --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+    --series-5: #e87ba4; --series-6: #008300; --series-7: #4a3aa7; --series-8: #e34948;
+    --good-text: #006300; --accent: #2a78d6; --accent-ink: #1c5cab; --accent-wash: #e6f0fc;
+    --violet-wash: #eeecfa; --warn-wash: #fdf3df; --crit-wash: #fbe9e9; --good-wash: #e6f4e6;
+  }
+  html, body, body.print-route { background: #ffffff !important; }
+  body.print-route #app { padding: 0; }
+  .doc { width: auto; margin: 0; padding: 0; box-shadow: none; }
+  .no-print, .kit-header, .kit-side, .kit-footer, button { display: none !important; }
+  .kit-layout { display: block; max-width: none; }
+  .kit-main { padding: 0; max-width: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  a { color: inherit; text-decoration: none; }
+  .avoid-break, .callout, figure, .formula-card, .q, tr, .ex-q, .cs-panel, .rc-a, .kq { break-inside: avoid; }
+  .kq-gen { break-inside: auto; }
+  h1, h2, h3, h4 { break-after: avoid; }
+  .page-break { break-before: page; }
+}
+/* The printed reviewer keeps formula cards compact: equation and legend only (the web and cheat sheet show use + example). */
+.doc-reviewer .formula-card .use, .doc-reviewer .formula-card .ex { display: none; }
+/* Cheat-sheet figures: two per row, scaled down — a reminder of the picture, not a full-size plot. */
+.cs-figs figure { flex: 0 1 calc(50% - 3mm); }
+.cs-figs figure svg { width: 100%; height: auto; }
+.cs-figs figure .kit-plot, .cs-figs figure .kit-wave { max-height: 46mm; }

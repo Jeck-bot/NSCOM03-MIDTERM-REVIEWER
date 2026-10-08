@@ -1,0 +1,144 @@
+/* Interactive visual styles (Phase 2). Shared classes live in app.css; add viz-specific rules here. Owner: Lead. */
+
+/* ---------- draw grid ---------- */
+.kit-grid .grid-hit { cursor: crosshair; }
+.kit-grid .grid-hit:focus { outline: none; fill: var(--accent-wash); fill-opacity: 0.6; }
+.kit-grid .grid-hit:hover { fill: var(--accent-wash); fill-opacity: 0.45; }
+.kit-grid .trace.user { stroke: var(--series-1); }
+.kit-grid .trace.stub { stroke: var(--text-muted); }
+.kit-grid .grid-dot { fill: var(--series-1); stroke: var(--surface); stroke-width: 1.5; pointer-events: none; }
+.kit-grid .grid-bad { fill: var(--crit-wash); stroke: var(--critical); stroke-width: 1; }
+.kit-grid.disabled .grid-hit { cursor: default; }
+.grid-wrap { margin: 6px 0; }
+.grid-scroll { overflow-x: auto; }
+
+/* ---------- practice ---------- */
+.problem-card .pc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px; }
+.problem-card .prompt { font-size: 15.5px; margin: 8px 0 12px; }
+.in-wrap { margin: 8px 0; }
+.in-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.in-row.col { flex-direction: column; align-items: flex-start; }
+.in-label { font-weight: 600; min-width: 150px; }
+.unit-hint { color: var(--text-muted); font-size: 13px; }
+.in-fb { margin-top: 3px; min-height: 1em; }
+.in-fb.ok { color: var(--good-text); font-weight: 600; }
+.in-fb.bad { color: var(--critical); font-weight: 600; }
+.btn.choice.picked { border-color: var(--accent); background: var(--accent-wash); }
+.verdict { font-weight: 700; margin: 4px 0; }
+.verdict.ok { color: var(--good-text); }
+.verdict.bad { color: var(--critical); }
+.hints { margin: 6px 0; padding-left: 20px; color: var(--text-secondary); }
+.gen-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 14px; }
+.gen-chip { text-decoration: none; padding: 3px 10px; font-size: 13px; }
+.gen-chip.active { background: var(--accent-wash); color: var(--accent-ink); }
+.practice-embed .card { box-shadow: none; }
+
+/* ---------- flashcards ---------- */
+.box-counts { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+.flashcard { cursor: pointer; font-size: 17px; perspective: 1000px; }
+.flash-inner { display: grid; transform-style: preserve-3d; transition: transform 0.1s ease-out; }   /* runs even with Windows animations off: asked for, and only 0.1 s */
+.flash-inner.is-flipped { transform: rotateY(180deg); }
+.flash-face { grid-area: 1 / 1; min-height: 210px; display: flex; flex-direction: column; justify-content: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.flash-face.flash-back { transform: rotateY(180deg); }
+.flash-face + .flash-face { margin-top: 0; }
+.flash-asked { font-size: 14px; color: var(--text-secondary); }
+.flash-asked .flash-term { font-size: 15px; }
+.flashcard .flash-term { font-size: 21px; font-weight: 700; }
+.flashcard hr { width: 100%; }
+.flash-meta { margin: 6px 0; }
+
+/* ---------- exam runner ---------- */
+.exam-bar { position: sticky; top: 49px; z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; margin: 8px 0 14px; }
+.exam-timer { font-weight: 700; font-variant-numeric: tabular-nums; }
+.exam-timer.warn { color: var(--critical); }
+.exam-item.right { border-left: 4px solid var(--good); }
+.exam-item.partial { border-left: 4px solid var(--warning); }
+.exam-item.wrong { border-left: 4px solid var(--critical); }
+.exam-explain { margin-top: 6px; color: var(--text-secondary); }
+.exam-sol { margin-top: 8px; }
+.exam-sol summary { cursor: pointer; font-weight: 600; }
+.essay-box { width: 100%; font-family: inherit; }
+.rubric { margin-top: 8px; padding: 8px 10px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+.rubric-row { display: block; margin: 3px 0; }
+
+/* ---------- L01 OSI stack figure ---------- */
+.kit-osi .osi-row, .kit-osi .tcp-row { fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1; }
+.kit-osi .osi-row.focus, .kit-osi .tcp-row.focus { fill: var(--accent-wash); stroke: var(--accent); }
+.kit-osi .osi-num { fill: var(--text-muted); font-weight: 700; }
+.kit-osi .osi-name { fill: var(--text-primary); font-weight: 600; font-size: 12px; }
+.kit-osi .osi-desc { fill: var(--text-secondary); font-size: 11px; }
+
+/* ---------- L03a 4B/5B figure ---------- */
+.blockcode-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 10px; }
+.bc-cell { text-align: center; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 4px 10px; background: var(--surface); }
+.bc-arrow { color: var(--text-muted); font-size: 12px; }
+.bc-code { font-weight: 700; color: var(--accent-ink); }
+
+/* ---------- L02 helpers ---------- */
+.dbchain { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 6px 0; }
+.db-stage { border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 4px 10px; text-align: center; background: var(--surface); }
+.db-stage.loss { border-left: 4px solid var(--series-8); }
+.db-stage.gain { border-left: 4px solid var(--series-6); }
+.db-val { font-weight: 700; }
+.db-end { font-weight: 700; color: var(--text-secondary); }
+.db-arrow { color: var(--text-muted); }
+.lat-wrap { margin: 6px 0; }
+.lat-bar { display: flex; height: 16px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--surface); max-width: 600px; }
+.lat-seg { display: block; min-width: 3px; height: 100%; }
+.cap-row { display: grid; grid-template-columns: minmax(150px, 260px) 1fr 110px; gap: 10px; align-items: center; margin: 8px 0; }
+.cap-label { font-size: 13px; color: var(--text-secondary); }
+.cap-track { height: 14px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.cap-fill { display: block; height: 100%; border-radius: 0 4px 4px 0; }
+.cap-fill.shannon { background: var(--series-1); }
+.cap-fill.nyquist { background: var(--series-2); }
+.cap-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+.viz-readout { margin-top: 6px; }
+
+/* ---------- sketch pad (wave drawing, drawable essays) ---------- */
+.sketch { margin: 8px 0; }
+.sketch-svg { width: 100%; height: auto; max-width: 640px; touch-action: none; cursor: crosshair; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+.sketch.locked .sketch-svg { cursor: default; }
+.sketch-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+.sketch-tools .btn[aria-pressed="true"] { background: var(--accent-wash); border-color: var(--accent); color: var(--accent-ink); }
+.kit-svg .ink { fill: none; stroke: var(--text-primary); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.kit-svg .sk-model-trace { fill: none; stroke: var(--series-2); stroke-width: 2.6; stroke-linejoin: round; opacity: 0.9; }
+.kit-svg .sk-model-dot { fill: var(--series-2); }
+.kit-svg .sk-key-trace { stroke: var(--series-1); }
+.kit-svg .sk-key-dot { fill: var(--series-1); }
+.kit-svg .sk-dots circle { fill: var(--axis); }
+.sketch-fig { width: 100%; height: auto; max-width: 640px; display: block; }
+.sketch-check { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
+
+/* ---------- Worked-example animation player (js/ui/anim.js) ---------- */
+.anim { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--raised); padding: 10px 12px; margin: 10px 0 12px; }
+.anim-label { font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: var(--text-secondary); margin-bottom: 4px; }
+.anim-stage { overflow-x: auto; min-height: 60px; }
+.anim-stage > * { margin: 4px 0; }
+.anim-waves { display: flex; flex-direction: column; gap: 6px; }
+.anim-caption { min-height: 2.6em; margin: 6px 0 4px; padding: 6px 10px; border-radius: 6px; background: var(--surface-2); font-size: 14px; }
+.anim-controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.btn.small { padding: 4px 10px; font-size: 13px; }
+.anim-bar { flex: 1 1 120px; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; min-width: 80px; }
+.anim-fill { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 3px; transition: width 0.2s ease-out; }
+.anim-count { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; min-width: 3.6em; text-align: right; }
+/* The piece added in this frame is drawn in (stroke) or faded in; stepping back or jumping shows the frame without motion. */
+.kit-svg .trace.focus { stroke: var(--series-2); stroke-width: 3.2; }
+.anim-stage .anim-new { animation: anim-fade 0.35s ease-out both; }
+.anim-stage .trace.focus.anim-new { stroke-dasharray: 1; stroke-dashoffset: 1; animation: anim-draw 0.55s ease-out forwards; }
+.anim-stage.no-anim .anim-new { animation: none; stroke-dashoffset: 0; opacity: 1; }
+@keyframes anim-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes anim-draw { to { stroke-dashoffset: 0; } }
+.anim.static .anim-caption { min-height: 0; }
+/* Hover to connect: every occurrence of the hovered quantity in the same example lights up. */
+.v-on { background: color-mix(in srgb, currentColor 16%, transparent); border-radius: 3px; outline: 1.5px solid color-mix(in srgb, currentColor 55%, transparent); }
+.kit-svg .v-on { outline: none; filter: drop-shadow(0 0 2px currentColor); }
+.color-key { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--text-secondary); margin: 2px 0 8px; }
+.color-key .ck { cursor: default; }
+@media print { .anim { break-inside: avoid; border-color: #ccc; } }
+/* Equation flow (KIT.anim.eqFrames): the solution written line by line under its diagram. */
+.anim-eq-fig { margin-bottom: 6px; }
+.anim-eq-lines { list-style: none; margin: 4px 0 0; padding: 0; font-size: 17px; }
+.anim-eq-lines li { padding: 3px 8px; border-radius: 6px; }
+.anim-eq-lines li.now { background: var(--accent-wash); }
+.anim-stage.no-anim .anim-eq-lines li.now { animation: none; }

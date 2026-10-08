@@ -1,0 +1,12 @@
+# Course slides are not ours to distribute: keep everything in Resources/ out of git except its README.
+Resources/*
+!Resources/README.md
+
+# Slide text extractions and scratch output
+**/source-digest.md
+**/kit-out*/
+node_modules/
+*.log
+Thumbs.db
+desktop.ini
+.DS_Store
